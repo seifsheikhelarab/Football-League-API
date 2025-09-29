@@ -18,7 +18,14 @@
   "type": "module",
   "main": "src/app.ts",
   "scripts": {
-    "test": "jest"
+    "test-start": "jest",
+    "test-watch": "jest --watch",
+    "dev-build": "tsc",
+    "dev-watch": "tsx watch src/app.ts",
+    "dev-start": "tsx src/app.ts",
+    "dev-lint": "eslint src --ext .ts",
+    "prod-start": "node dist/app.js",
+    "prod-watch": "nodemon dist/app.js"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",
