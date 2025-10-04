@@ -6,7 +6,7 @@ import { logger } from "../config/logger.config.js";
 const prisma = new PrismaClient();
 
 export async function listAllTeams(
-  req: Request,
+  _req: Request,
   res: Response<{ message: string; teams?: Team[]; error?: unknown }>
 ): Promise<void> {
 
@@ -63,11 +63,11 @@ export async function changeShirtColor(
       return;
     }
 
-    const team = await prisma.team.findFirst({ where: { id } });
+    const team = await prisma.team.findFirst({ where: { id: Number(id) } });
     if (!team) {
       res.status(404).json({ "message": "No team found." })
     } else {
-      await prisma.team.update({ where: { id }, data: { shirtColor } })
+      await prisma.team.update({ where: { id: Number(id) }, data: { shirtColor } })
 
       res.status(200).json({ "message": "Shirt color updated successfully.", team });
       return;
@@ -79,23 +79,20 @@ export async function changeShirtColor(
   }
 }
 
-export async function getPlayersByTeam(
-  req: Request<{ id: string }, object, object>,
-  res: Response<{ message: string; players?: object; error?: unknown }>
+
+export async function createTeam(
+  req: Request<object, object, Team>,
+  res: Response<{ message: string; team?: Team; error?: unknown }>
 ): Promise<void> {
   try {
-    const id = req.params["id"];
-
-    const { players } = prisma.team.findFirst({ where: { id: Number(id) } });
-
-    if (players === undefined) {
-      res.status(404).json({ "message": "No players found" });
-      return;
-    } else {
-      res.status(200).json({ "message": "Players retrieved successfully", players });
+    const { teamName, shirtColor } = req.body;
+    if (!teamName || !shirtColor) {
+      res.status(400).json({ "message": "teamName and shirtColor are required in the request body." });
       return;
     }
 
+    const newTeam = await prisma.team.create({ data: { teamName, shirtColor } });
+    res.status(200).json({ "message": "Team created successfully", team: newTeam });
   } catch (error: unknown) {
     logger.error(error);
     res.status(500).json({ "message": "Internal server error.", error });

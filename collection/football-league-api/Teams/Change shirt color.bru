@@ -1,0 +1,17 @@
+meta {
+  name: Change shirt color
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/teams/1/shirt-color
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "shirtColor": "greenish blue"
+  }
+}

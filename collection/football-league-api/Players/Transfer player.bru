@@ -1,0 +1,17 @@
+meta {
+  name: Transfer player
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/players/1/transfer
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "teamId":2
+  }
+}

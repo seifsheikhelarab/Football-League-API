@@ -1,0 +1,18 @@
+meta {
+  name: Create team
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/teams
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "teamName": "7amada SC",
+    "shirtColor": "green"
+  }
+}
